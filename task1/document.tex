@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{Bell et al.}
+\date{}
+\maketitle
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{in_sample_figure}
+\caption{A: In Sample}
+\label{fig:in_sample}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{out_of_sample_figure}
+\caption{B: Out of Sample, 2019}
+\label{fig:out_of_sample}
+\end{minipage}
+\caption{Structural Model Fits the Data Distribution. \textit{Notes:} The dark line shows observed data ECDF. The overlapping lighter shaded lines show 20 realizations from the posterior predictive distribution. Plot axes are truncated at 375 to show detail.}
+\label{fig:structural_model}
+\end{figure}
+
+Given the characteristics of practices and locations, and conditionally on the known values of the error terms ($\epsilon_{mt}$), the optimality conditions for this constrained maximization problem result in a system of equations that consist of equality conditions for positive quantities and inequality conditions for zeros. This enables us to map an observed allocation decision into its corresponding region in the error space, which forms the basis for deriving the model likelihood. Because we, the researchers, do not observe the error term, we assume it is Gumbel distributed (following Bhat 2005), thus producing a closed form for the likelihood function.
+
+Without loss of generality, suppose the first K locations are allocated positive time, and the rest are not visited. Then the model likelihood for an observed optimal allocation ($\alpha_1 > 0, \dots, \alpha_K > 0, \alpha_{K+1} = 0, \dots, \alpha_n = 0$) is given by the following:
+\begin{align} \label{eq:1}
+l(\alpha_1, \dots, \alpha_K, 0, \dots, 0) = \prod_{i=1}^K \left[ \prod_{j=1, j \ne i}^K \frac{e^{V(\alpha_i)}}{e^{V(\alpha_i)} + e^{V(\alpha_j)}} \right] \times \left[ \sum_{i=1}^K e^{V(\alpha_i)} \right]^{-(K-1)} (4)
+\end{align}
+where $\alpha = (\alpha_1, \dots, \alpha_K)$ and $V(\alpha_i) = \beta'X_i + \log(\gamma_i) + (\gamma_i - 1) \log(\alpha_i + \tau_i)$. We provide more details for the likelihood derivation in the Web Appendix.
+
+Practices might place different weights in evaluating the utility of their allocation decisions. To incorporate practice heterogeneity, we allow for the baseline preference and diminishing returns parameters, which determine the shape of utility function, to be practice-specific. We use a random-effects specification for the practice-level parameters as follows:
+\begin{align} \label{eq:2}
+\theta_m = (\beta_{0m}, \gamma_m) \sim MVN(D z_m, \Lambda) (5)
+\end{align}
+where $z_m = (1, \text{age}_m, \text{percent female}_m, \text{percent MD}_m, \text{practice size}_m)$ is a vector of practice-level characteristics that shift the mean of the random-effect distribution. The matrix D contains regression coefficients, and $\Lambda$ is the covariance matrix of unobserved heterogeneity. Based on previous literature, we chose four characteristics: average physician age ($\text{age}_m$), the proportion of female physicians at the practice ($\text{percent female}_m$), the proportion of physicians that had MD degrees (vs. Doctor of Osteopathic Medicine [DO] degrees) ($\text{percent MD}_m$), and practice size ($\text{practice size}_m$). Age is associated with less frequent participation in rural outreach (O'Sullivan, Joyce, and McGrail 2014), as is being a female physician (O'Sullivan, Stoelwinder, and McGrail 2015). In general, DOs, as opposed to MDs, are more likely to practice in a rural location (Ahmed and Carmody 2022). Practice size should have an effect on the diminishing returns of utility of time spent in the home market. Larger practices require a larger patient base. Thus, spending more time at home does not necessarily grow the practice base since the number of patients, even in urban areas, is limited.
+
+Note that $\theta_m$ does not include the baseline parameter for the home location ($\beta_{0m}$). Because one of the baseline parameters is required to be fixed for model identification, we fix the baseline for the home location to be zero (i.e., $\beta_{0m} = 0$). In addition, to ensure the diminishing returns parameters fall between 0 and 1, we reparameterize $\gamma_m$ as $1/(1 + e^{-\gamma_m})$ and analogously for $\gamma_m$.
+
+\section*{Estimation Results}
+
+Given the hierarchical structure, we estimated the model using Bayesian Markov chain Monte Carlo methods with proper but relatively diffuse priors (details in the Web Appendix). We ran the chain for 500,000 iterations, with the first 100,000 draws discarded as burn-in. We thinned the chain by retaining every tenth iteration, thus leaving 40,000 draws to summarize the posterior distribution.
+
+\end{document}
