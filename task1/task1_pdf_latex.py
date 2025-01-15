@@ -13,9 +13,7 @@ import pandas as pd
 
 
 # change to location of file
-#os.chdir(os.path.dirname(os.path.abspath(__file__)))
-# change to ~/PythonPackages/wildbench/task1
-os.chdir(os.getenv("HOME") + "/PythonPackages/wildbench/task1")
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Setup
 load_dotenv("../.env", verbose=True)
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -143,8 +141,7 @@ for rep in range(repetitions):
     except:
         question_text = f"Please give the value of the log-likelihood provided in the following text: {response.text}"
         q_LL_extract = QuestionNumerical(question_name = "LL_extract", question_text = question_text)
-        print(f"EDSL key in environment? os.getenv('EXPECTED_PARROT_API_KEY') = {os.getenv('EXPECTED_PARROT_API_KEY')}")
-        r_LL_extract = q_LL_extract.by(edsl_models).run() #run(disable_remote_inference=True)
+        r_LL_extract = q_LL_extract.by(edsl_models).run(disable_remote_inference=True)
         computed_LL = r_LL_extract.select("LL_extract").to_list()[0]
         if abs(true_LL - computed_LL) < 1:
             successes[rep] = 1
@@ -156,12 +153,7 @@ def write_success_rate(success_rate, row_name, csv_path='results.csv'):
     try:
         df = pd.read_csv(csv_path, index_col=0)
     except FileNotFoundError:
-        df = pd.DataFrame()
-    
-    if row_name not in df.index:
-        df.loc[row_name] = np.nan
-    if 'score' not in df.columns:
-        df['score'] = np.nan
+        df = pd.DataFrame(columns=['score'])
     
     df.loc[row_name, 'score'] = success_rate
     df.to_csv(csv_path)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.9)  15 JAN 2025 16:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.9)  15 JAN 2025 18:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -184,49 +184,47 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 
-LaTeX Warning: No \author given.
-
-
-! LaTeX Error: File `in_sample_figure' not found.
+! LaTeX Error: File `figure5a' not found.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.15 ...aphics[width=\textwidth]{in_sample_figure}
-                                                  
+l.16 \includegraphics[width=\textwidth]{figure5a}
+                                                 
 ? 
 
-! LaTeX Error: File `out_of_sample_figure' not found.
+! LaTeX Error: File `figure5b' not found.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.22 ...cs[width=\textwidth]{out_of_sample_figure}
-                                                  
+l.22 \includegraphics[width=\textwidth]{figure5b}
+                                                 
 ? 
-
-Overfull \hbox (0.41904pt too wide) detected at line 35
-[]
- []
-
 [1
 
 {/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (1.91096pt too wide) in paragraph at lines 44--47
+\OT1/cmr/m/n/10 where $\OML/cmm/m/it/10 z[] \OT1/cmr/m/n/10 = (1\OML/cmm/m/it/1
+0 ; age[]; percent[]female[]; percent[]MD[]; practice[]size[]\OT1/cmr/m/n/10 )$
+ is a vec-
+ []
+
 [2] (./document.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 2644 strings out of 478268
- 43987 string characters out of 5846348
- 341314 words of memory out of 5000000
+ 2643 strings out of 478268
+ 43362 string characters out of 5846348
+ 338314 words of memory out of 5000000
  20828 multiletter control sequences out of 15000+600000
- 474373 words of font info for 46 fonts, out of 8000000 for 9000
+ 474027 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,10n,67p,1292b,234s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 60i,10n,67p,1237b,234s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 </usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
@@ -236,12 +234,11 @@ sr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr
 ocal/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loc
 al/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/
 texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/t
-exlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/tex
-live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on ./document.pdf (2 pages, 122177 bytes).
+exlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on ./document.pdf (2 pages, 116059 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
- 39 compressed objects within 1 object stream
+ 61 PDF objects out of 1000 (max. 8388607)
+ 36 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
