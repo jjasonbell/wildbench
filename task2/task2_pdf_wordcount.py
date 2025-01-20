@@ -21,7 +21,6 @@ edsl_models = [gpt4o]
 repetitions = 10
 successes = np.zeros(repetitions)
 for rep in range(repetitions):
-    # Step 1: Convert a PDF page to LaTeX
     doc_path = "target_doc.pdf" 
     with open(doc_path, "rb") as doc_file:
         doc_data = base64.standard_b64encode(doc_file.read()).decode("utf-8")
