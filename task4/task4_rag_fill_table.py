@@ -5,8 +5,10 @@ from glob import glob
 from edsl import QuestionFreeText, Model
 import numpy as np 
 import pandas as pd
+from openai import OpenAI
 
 
+client = OpenAI()
 #os.chdir(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(os.getenv("HOME") + "/PythonPackages/wildbench/task4")
 # Setup
@@ -16,37 +18,82 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 gpt4o = Model("gpt-4o")
 edsl_models = [gpt4o]
 
+
+paths = glob("*.txt")
+with open(paths[0], "r") as file:
+    text_one = file.read()
+with open(paths[1], "r") as file:
+    text_two = file.read()
+
+table_true = pd.read_csv("supplement_table.csv")
+true_rows = table_true["Supplement"].tolist()
+true_rows = [row for row in true_rows if str(row) != 'nan']
+
+
 repetitions = 10
 score = np.zeros(repetitions)
 for rep in range(repetitions):
-    paths = glob("*.txt")
-    with open(paths[0], "r") as file:
-        text_one = file.read()
-    with open(paths[1], "r") as file:
-        text_two = file.read()
+        
+    message1 = [{
+        "role": "user",
+        "content": f"""I want you to make a single column table from the following text. The rows
+        should have supplement names, the column is health category of the document, and the cells are
+        evidence categories: Primary, Secondary, Promising, Unproven, and Inadvisable. The text is:
+        {text_one}"""
+    }]
 
-    ##### YOU ARE HERE #####
-    extract_csv_text = f"Please extract the information from the response that can be formatted as a CSV file, NOT INCLUDING any tags such as ```csv```: {response.text}"
+    completion = client.chat.completions.create(
+        model="gpt-4o", 
+        messages=message1
+    )
+
+    r1 = completion.choices[0].message.content
+
+    message2 = [{
+        "role": "user",
+        "content": f"""I want you to make a single column table from the following text. The rows
+        should have supplement names, the column is health category of the document, and the cells are
+        evidence categories: Primary, Secondary, Promising, Unproven, and Inadvisable. The text is:
+        {text_two}"""
+    }]
+
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=message2
+    )
+
+    r2 = completion.choices[0].message.content
+
+    message3 = [{
+        "role": "user",
+        "content": f"""I want you to construct a table from the following two columns: {r1} and
+        {r2}. The rows should be the supplement names, the columns should be the health categories, and
+        the cells should be the evidence categories. Please format the table as a CSV file."""
+    }]
+
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=message3
+    )
+    r3 = completion.choices[0].message.content
+
+
+    extract_csv_text = f"""Please extract the information from the response that can be formatted as a
+        CSV file, NOT INCLUDING any tags such as ```csv```: {r3}"""
     q_extract_csv = QuestionFreeText(question_name = "extract_csv", question_text = extract_csv_text)
     extract_csv = q_extract_csv.by(edsl_models).run(disable_remote_inference=True)
     extract_csv.select("extract_csv").print(format="rich")
-
     csv_path = "extracted_table.csv"
     with open(csv_path, "w") as csv_file:
         csv_string = extract_csv.select("extract_csv")[0]["answer.extract_csv"][0]
         csv_file.write(csv_string)
 
-    table_true = pd.read_csv("alphabet_10K_cash_flows.csv", index_col=0)
-    table_true.index = table_true.index.str.lower().str.strip()
-    true_rows = table_true.index.tolist()
-    true_rows = [row for row in true_rows if str(row) != 'nan']
     try:
         table_model = pd.read_csv("extracted_table.csv", index_col=0)
         table_model.index = table_model.index.str.lower().str.strip()
         extracted_rows = table_model.index.tolist()
         extracted_rows = [row for row in extracted_rows if str(row) != 'nan']
 
-        # get subset of true rows that exist in the extracted table after stripping whitespace
         def get_true_rows(true_rows, extracted_rows):
             true_rows = [row for row in true_rows if row in extracted_rows]
             return true_rows
@@ -58,14 +105,10 @@ for rep in range(repetitions):
         for row in true_rows_matched:
             total_cells += len(table_true.loc[row].tolist())
             true_nans = 0
-            # first check to see if any cells are nan
             if table_true.loc[row].isnull().values.any():
-                # then check how many cells are nan and how many match
                 true_row = table_true.loc[row].tolist() 
                 extracted_row = table_model.loc[row].tolist()
-                # count how many are nan in both
                 true_nans = sum([1 for i in range(len(true_row)) if str(true_row[i]) == 'nan'])
-            # see how many cells match 
             true_row = table_true.loc[row].tolist()
             extracted_row = table_model.loc[row].tolist()
             num_cells_matched = sum([1 for i in range(len(true_row)) if true_row[i] == extracted_row[i]])
@@ -89,4 +132,4 @@ def write_success_rate(score, row_name, csv_path='results.csv'):
     df.loc[row_name, 'score'] = score
     df.to_csv(csv_path)
 
-write_success_rate(np.mean(score), 'Task3', csv_path="../results.csv")
+write_success_rate(np.mean(score), 'Task4', csv_path="../results.csv")

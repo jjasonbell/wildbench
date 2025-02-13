@@ -26,7 +26,7 @@ for rep in range(repetitions):
 
     prompt = "get the table on page 55, the Consolidated Statement of Cash Flows, and reproduce it as a CSV file"
     response = pdf_model.generate_content([{'mime_type': 'application/pdf', 'data': doc_data}, prompt])
-    extract_csv_text = f"Please extract the information from the response that can be formatted as a CSV file, NOT INCLUDING an tags such as ```csv```: {response.text}"
+    extract_csv_text = f"Please extract the information from the response that can be formatted as a CSV file, NOT INCLUDING any tags such as ```csv```: {response.text}"
     q_extract_csv = QuestionFreeText(question_name = "extract_csv", question_text = extract_csv_text)
     extract_csv = q_extract_csv.by(edsl_models).run(disable_remote_inference=True)
     extract_csv.select("extract_csv").print(format="rich")
