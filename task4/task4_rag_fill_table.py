@@ -9,8 +9,7 @@ from openai import OpenAI
 
 
 client = OpenAI()
-#os.chdir(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(os.getenv("HOME") + "/PythonPackages/wildbench/task4")
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Setup
 load_dotenv("../.env", verbose=True)
 
